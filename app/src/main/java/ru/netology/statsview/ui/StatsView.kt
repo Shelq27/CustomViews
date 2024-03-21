@@ -92,9 +92,10 @@ class StatsView @JvmOverloads constructor(
             return
         }
         var startAngle = -90F
-        var maxDatum = data.sum()
+        val maxDatum = data.sum()
+        val fillStatsView = (data.lastIndex + 1) * 0.25F
         data.forEachIndexed { index, datum ->
-            val angle = 360F * (datum / maxDatum)
+            val angle = 360F * (datum / maxDatum) * fillStatsView
             paint.color = colors.getOrElse(index) { generateRandomColor() }
             canvas.drawArc(oval, startAngle, angle, false, paint)
             startAngle += angle
@@ -102,15 +103,15 @@ class StatsView @JvmOverloads constructor(
         }
 
 
-        startAngle=-90F
-        paint.color = (colors[0])
-        canvas.drawArc(oval, startAngle, data[0]/maxDatum, false, paint)
+//        startAngle=-90F
+//        paint.color = (colors[0])
+//        canvas.drawArc(oval, startAngle, data[0]/maxDatum, false, paint)
 
         canvas.drawText(
-            "%.2f%%".format((data.lastIndex+1)*25F),
-        center.x,
-        center.y + textPaint.textSize / 4,
-        textPaint
+            "%.2f%%".format(fillStatsView*100),
+            center.x,
+            center.y + textPaint.textSize / 4,
+            textPaint
         )
 
     }
