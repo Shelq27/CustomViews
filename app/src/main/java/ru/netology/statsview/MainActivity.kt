@@ -19,10 +19,10 @@ class MainActivity : AppCompatActivity() {
         val view = findViewById<StatsView>(R.id.statsView)
         val viewText = findViewById<StatsTextView>(R.id.statsTextView)
         view.data = listOf(
-            0.25F,
-            0.25F,
-            0.25F,
-            0.25F,
+            500F,
+            500F,
+            500F,
+            500F
         )
         viewText.data = view.data
 

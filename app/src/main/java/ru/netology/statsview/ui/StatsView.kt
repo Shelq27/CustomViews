@@ -85,17 +85,36 @@ class StatsView @JvmOverloads constructor(
             return
         }
         var startAngle = -90F
+        val maxDatum = data.sum()
+        val fillStatsView = (data.lastIndex + 1) * 0.25F
         data.forEachIndexed { index, datum ->
-            val angle = datum * 360F
+
+         
+
+            val angle = 360F * (datum / maxDatum) * fillStatsView
+
             paint.color = colors.getOrElse(index) { generateRandomColor() }
             canvas.drawArc(oval, startAngle, angle * progress, false, paint)
             startAngle += angle
+
         }
 
         //Повтор 1 дуги
 //        startAngle=-90F
 //        paint.color = (colors[0])
 //        canvas.drawArc(oval, startAngle, data[0] * 0.18F, false, paint)
+
+
+//        startAngle=-90F
+//        paint.color = (colors[0])
+//        canvas.drawArc(oval, startAngle, data[0]/maxDatum, false, paint)
+
+        canvas.drawText(
+            "%.2f%%".format(fillStatsView*100),
+            center.x,
+            center.y + textPaint.textSize / 4,
+            textPaint
+        )
 
 
     }
