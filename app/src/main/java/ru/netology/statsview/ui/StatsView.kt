@@ -109,12 +109,7 @@ class StatsView @JvmOverloads constructor(
 //        paint.color = (colors[0])
 //        canvas.drawArc(oval, startAngle, data[0]/maxDatum, false, paint)
 
-        canvas.drawText(
-            "%.2f%%".format(fillStatsView*100),
-            center.x,
-            center.y + textPaint.textSize / 4,
-            textPaint
-        )
+
 
 
     }
