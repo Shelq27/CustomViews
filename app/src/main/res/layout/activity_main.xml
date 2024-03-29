@@ -6,30 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/label"
+    <FrameLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/start_scene" />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/goButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|center_horizontal" />
-
-    <ru.netology.statsview.ui.StatsView
-        android:id="@+id/statsView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        app:color1="#391279"
-        app:color2="#939124"
-        app:color3="#182957"
-        app:color4="#582012"
-        app:lineWidth="16dp" />
-
-    <ru.netology.statsview.ui.StatsTextView
-        android:id="@+id/statsTextView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        app:textSize="40sp"
-
-        />
+        android:layout_gravity="bottom|center"
+        android:text="@string/go" />
 
 </FrameLayout>
