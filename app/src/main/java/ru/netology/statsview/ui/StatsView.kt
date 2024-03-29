@@ -57,10 +57,10 @@ class StatsView @JvmOverloads constructor(
     }
 
 
-    var data: List<Float> = emptyList()
+    var data: List<Float> = listOf(500F, 500F, 500F, 500F)
         set(value) {
             field = value
-            update()
+            invalidate()
         }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -94,7 +94,7 @@ class StatsView @JvmOverloads constructor(
             val angle = 360F * (datum / maxDatum) * fillStatsView
 
             paint.color = colors.getOrElse(index) { generateRandomColor() }
-            canvas.drawArc(oval, startAngle, angle * progress, false, paint)
+            canvas.drawArc(oval, startAngle, angle, false, paint)
             startAngle += angle
 
         }

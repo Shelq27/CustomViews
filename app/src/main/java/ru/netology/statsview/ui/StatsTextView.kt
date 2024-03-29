@@ -25,6 +25,7 @@ class StatsTextView @JvmOverloads constructor(
 ) {
     private var center = PointF()
     private var textSize = AndroidUtils.dp(context, 20).toFloat()
+
     init {
         context.withStyledAttributes(attributeSet, R.styleable.StatsTextView) {
             textSize = getDimension(R.styleable.StatsTextView_textSize, textSize)
@@ -39,8 +40,7 @@ class StatsTextView @JvmOverloads constructor(
     }
 
 
-
-    var data: List<Float> = emptyList()
+    var data: List<Float> = listOf(500F, 500F, 500F, 500F)
         set(value) {
             field = value
             invalidate()
