@@ -29,6 +29,7 @@ class StatsView @JvmOverloads constructor(
     defStyleRes
 ) {
     private var lineWith = AndroidUtils.dp(context, 5)
+    private var textSize = AndroidUtils.dp(context, 40).toFloat()
     private var colors = emptyList<Int>()
     private var radius = 0F
     private var center = PointF()
@@ -40,6 +41,8 @@ class StatsView @JvmOverloads constructor(
     init {
         context.withStyledAttributes(attributeSet, R.styleable.StatsView) {
             lineWith = getDimension(R.styleable.StatsView_lineWidth, lineWith.toFloat()).toInt()
+            textSize = getDimension(R.styleable.StatsView_textSize, textSize)
+
             colors = listOf(
                 getColor(R.styleable.StatsView_color1, generateRandomColor()),
                 getColor(R.styleable.StatsView_color2, generateRandomColor()),
@@ -55,12 +58,17 @@ class StatsView @JvmOverloads constructor(
         strokeJoin = Paint.Join.ROUND
         strokeCap = Paint.Cap.ROUND
     }
+    private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textSize = this@StatsView.textSize
+        style = Paint.Style.FILL
+        textAlign = Paint.Align.CENTER
+    }
 
 
-    var data: List<Float> = emptyList()
+    var data: List<Float> = listOf(500F, 500F, 500F, 500F)
         set(value) {
             field = value
-            update()
+            invalidate()
         }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -77,24 +85,28 @@ class StatsView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
 
-        //Светло Серый круг
-        paint.color = 0xFFD3D3D3.toInt()
-        canvas.drawCircle(center.x, center.y, radius, paint)
 
         if (data.isEmpty()) {
             return
         }
+        //Светло Серый круг
+        paint.color = 0xFFD3D3D3.toInt()
+        canvas.drawCircle(center.x, center.y, radius, paint)
+        val total = data.map { (it / data.sum() * 100) }
+
+        canvas.drawText(
+            "%.2f%%".format(total.sum()),
+            center.x,
+            center.y + textPaint.textSize / 4,
+            textPaint
+        )
         var startAngle = -90F
         val maxDatum = data.sum()
         val fillStatsView = (data.lastIndex + 1) * 0.25F
         data.forEachIndexed { index, datum ->
-
-         
-
             val angle = 360F * (datum / maxDatum) * fillStatsView
-
             paint.color = colors.getOrElse(index) { generateRandomColor() }
-            canvas.drawArc(oval, startAngle, angle * progress, false, paint)
+            canvas.drawArc(oval, startAngle, angle , false, paint)
             startAngle += angle
 
         }
@@ -105,32 +117,8 @@ class StatsView @JvmOverloads constructor(
 //        canvas.drawArc(oval, startAngle, data[0] * 0.18F, false, paint)
 
 
-//        startAngle=-90F
-//        paint.color = (colors[0])
-//        canvas.drawArc(oval, startAngle, data[0]/maxDatum, false, paint)
-
-
-
-
     }
 
-    private fun update() {
-        valueAnimator?.let {
-            it.removeAllListeners()
-            it.cancel()
-        }
-        progress = 0F
-        valueAnimator = ValueAnimator.ofFloat(0F, 1F).apply {
-            addUpdateListener { anim ->
-                progress = anim.animatedValue as Float
-                invalidate()
-            }
-            duration = 2000
-            interpolator = LinearInterpolator()
-        }.also {
-            it.start()
-        }
-    }
 
     private fun generateRandomColor() = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt())
 }

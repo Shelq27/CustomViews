@@ -1,34 +1,31 @@
 package ru.netology.statsview
 
-import android.animation.ObjectAnimator
-import androidx.appcompat.app.AppCompatActivity
+import android.animation.LayoutTransition
 import android.os.Bundle
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.BaseInterpolator
 import android.view.animation.BounceInterpolator
+import android.view.animation.CycleInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.TextView
-import ru.netology.statsview.ui.StatsTextView
-import ru.netology.statsview.ui.StatsView
+import android.view.animation.OvershootInterpolator
+import androidx.appcompat.app.AppCompatActivity
+import kotlin.time.Duration.Companion.days
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val view = findViewById<StatsView>(R.id.statsView)
-        val viewText = findViewById<StatsTextView>(R.id.statsTextView)
-        view.data = listOf(
-            500F,
-            500F,
-            500F,
-            500F
-        )
-        viewText.data = view.data
+        val root = findViewById<ViewGroup>(R.id.root)
+        val goButton = findViewById<View>(R.id.goButton)
 
-        view.animate()
-            .rotation(360F)
-            .setDuration(2000)
-            .start()
+        root.layoutTransition = LayoutTransition().apply {
+            setDuration(1_000)
+            setInterpolator(LayoutTransition.CHANGE_APPEARING, OvershootInterpolator(4F))
+        }
+        goButton.setOnClickListener {
+            val view = layoutInflater.inflate(R.layout.stats_view, root, false)
+            root.addView(view, 0)
+        }
     }
 }
